@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"notebook.output.textLineLimit": 150,
+		"notebook.output.wordWrap": false,
+		"notebook.output.scrolling": true
+	}
+}
