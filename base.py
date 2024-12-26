@@ -22,6 +22,143 @@ import tests_cl as tcl
 
 
 ###################################################################
+# Functions to upload triangles:
+###################################################################
+
+# From DataBase:
+
+def upload_triangle_from_csv(file: str, base_period: str, dev_period: str, aggr_values: str, lob_column: str = None, lob_name: str = None, type_triangle: str = None):
+
+    """
+    Function to upload triangles from a data base in .csv format. 
+    Database must include a column for origin period (ie. Acc.Years), Development period (Lags), and the values to upload (ie. Incurrec Losses).
+
+    Parameters
+    ----------
+    file: (str)  
+        Path of file to read  
+
+    base_period: (str)  
+        Name of the column that refers to the origin period.    
+
+    dev_period: (str)  
+        Name of the column that refers to the development period.    
+
+    aggr_values: (str)  
+        Name of the column that refers to the values to aggregate (payments, incurred costs, reserves...).  
+
+    lob_column: (str)  
+        Name of the column that refers to LoB in case the data need to be filtered. None as default.  
+
+     lob_name: (str)  
+        Name of the LoB we want to filter. None as default.         
+
+     type_triangle: (str)  
+        The type of triangle to assign a class. None as a default value. Possible options:  
+            - 'CumPayments'  
+            - 'IncPayments'  
+            - 'CaseReserves'  
+            - 'Incurred'  
+
+    """
+
+    if type_triangle == None:
+        triangle = tr.triangle_from_csv(file, base_period, dev_period, aggr_values, lob_column, lob_name)
+        return triangle
+
+    elif type_triangle == 'CumPayments':
+        triangle = tr.triangle_from_csv(file, base_period, dev_period, aggr_values, lob_column, lob_name)
+        return CumPayments_triangle(triangle)
+    
+    elif type_triangle == 'IncrPayments':
+        triangle = tr.triangle_from_csv(file, base_period, dev_period, aggr_values, lob_column, lob_name)
+        return IncPayments_triangle(triangle)
+    
+    elif type_triangle == 'CaseReserves':
+        triangle = tr.triangle_from_csv(file, base_period, dev_period, aggr_values, lob_column, lob_name)
+        return CaseReserves_triangle(triangle)
+    
+    elif type_triangle == 'Incurred':
+        triangle = tr.triangle_from_csv(file, base_period, dev_period, aggr_values, lob_column, lob_name)
+        return Incurred_triangle(triangle)
+    
+    else: return print('Include a valid type_triangle or review the inputs.')
+
+
+# From a triangle already built in excel:
+
+def upload_triangle_from_excel(file: str, sheet: str, init_col: int, init_row: int, dim: int, start_year: int, month: int = 12, periodicity: str = 'annual', type_triangle: str = None):
+
+    """
+    Function to upload triangles from a data base in .csv format.   
+    Database must include a column for origin period (ie. Acc.Years), Development period (Lags), and the values to upload (ie. Incurrec Losses).  
+
+    Parameters  
+    ----------  
+    file: (str)  
+        Path of file to read  
+
+    sheet: (str)  
+        Sheet of location of the triagle.    
+
+    init_col: (int)  
+        Number of the column in which the triangle starts.    
+
+    init_row: (int)    
+        Number of the row in which the triangle starts.    
+
+    dim: (int)  
+        Number of rows/columns to read, or dimension of triangle.  
+
+    start_year: (int)  
+        First origin year.  
+
+     month: (int)  
+        First origin month.         
+
+     periodicity: (str)  
+        Periodicity of the triangle:  
+            - 'Annual'    
+            - 'biannual'    
+            - 'three_times_year'    
+            - 'quarterly'    
+            - 'bimonthly'    
+            - 'monthly'      
+
+     type_triangle: (str)  
+        The type of triangle to assign a class. None as a default value. Possible options:  
+            - 'CumPayments'    
+            - 'IncPayments'    
+            - 'CaseReserves'    
+            - 'Incurred'    
+            
+    """
+
+    if type_triangle == None:
+        triangle = tr.upload_triangle_excel(file, sheet, init_col, init_row, dim, start_year, month, periodicity)
+        return triangle
+
+    elif type_triangle == 'CumPayments':
+        triangle = tr.upload_triangle_excel(file, sheet, init_col, init_row, dim, start_year, month, periodicity)
+        return CumPayments_triangle(triangle)
+    
+    elif type_triangle == 'IncrPayments':
+        triangle = tr.upload_triangle_excel(file, sheet, init_col, init_row, dim, start_year, month, periodicity)
+        return IncPayments_triangle(triangle)
+    
+    elif type_triangle == 'CaseReserves':
+        triangle = tr.upload_triangle_excel(file, sheet, init_col, init_row, dim, start_year, month, periodicity)
+        return CaseReserves_triangle(triangle)
+    
+    elif type_triangle == 'Incurred':
+        triangle = tr.upload_triangle_excel(file, sheet, init_col, init_row, dim, start_year, month, periodicity)
+        return Incurred_triangle(triangle)
+    
+    else: return print('Include a valid type_triangle or review the inputs.')
+
+
+
+###################################################################
 # Classes of triangles to integrate functions:
 ###################################################################
 
@@ -30,14 +167,14 @@ import tests_cl as tcl
 class triangle():
 
     """
-    Class to include common methods for all type of triangles.
+    Class to include common methods for all type of triangles.  
 
-    Atributes
-    ----------
-        - diag
-        - graph_tr
-        - heatmap
-        - show
+    Atributes  
+    ----------  
+        - diag  
+        - graph_tr  
+        - heatmap  
+        - show  
     """
 
     def __init__(self, input_triangle): 
@@ -99,21 +236,21 @@ class triangle():
 class CumPayments_triangle(triangle):
 
     """
-    Class to include Cumulative Payment Triangles.
+    Class to include Cumulative Payment Triangles.  
 
-    Atributes
-    ----------
-        - diag
-        - graph_tr
-        - heatmap
-        - show
-        - link_factors
-        - heatmap_linkf
-        - graph_linkf
-        - get_dev_f
-        - graph_dev_f
-        - chainladder
-        - bf
+    Atributes  
+    ----------  
+        - diag   
+        - graph_tr  
+        - heatmap  
+        - show  
+        - link_factors  
+        - heatmap_linkf  
+        - graph_linkf  
+        - get_dev_f  
+        - graph_dev_f  
+        - chainladder  
+        - bf  
     """
 
     def __init__(self, input_triangle):
@@ -156,40 +293,40 @@ class CumPayments_triangle(triangle):
     #    return devf.df_generator(self.input_triangle, method, cal_y_ignore, acc_y_ignore, f_ignore)
     def get_dev_f(self, method, cal_y_ignore = 0, acc_y_ignore = 0, f_ignore = None):
         """
-        Returns the Development Factors in order to project losses.
+        Returns the Development Factors in order to project losses.  
 
-        Parameters
-        ----------
-        method: (str)
-            Method to estimate development factors. Possible values:
-                - 'all': Returns a summary of all metrics.
-                - 'avg': Arithmetic mean of the Link Factors. 
-                - 'vol_weight': Weighted average of the factors by the amount of claims (giving greater weight to factors with a higher claim frequency). (Most used)
-                - 'time_weight': Weighted average of the factors, giving more weight to the most recent factors compared to older periods.
-                - 'median': Median of the step factors.
-                - 'geom_avg': Geometric average.
-                - 'medial_avg': Arithmetic mean, ignoring the maximum and minimum Link Factors.
-                - 'min': Value of the minimum Link Factor.
-                - 'max': Value of the maximum Link Factor.
+        Parameters  
+        ----------  
+        method: (str)  
+            Method to estimate development factors. Possible values:  
+                - 'all': Returns a summary of all metrics.  
+                - 'avg': Arithmetic mean of the Link Factors.   
+                - 'vol_weight': Weighted average of the factors by the amount of claims (giving greater weight to factors with a higher claim frequency). (Most used)  
+                - 'time_weight': Weighted average of the factors, giving more weight to the most recent factors compared to older periods.  
+                - 'median': Median of the step factors.  
+                - 'geom_avg': Geometric average.  
+                - 'medial_avg': Arithmetic mean, ignoring the maximum and minimum Link Factors.  
+                - 'min': Value of the minimum Link Factor.  
+                - 'max': Value of the maximum Link Factor.  
         
-        cal_y_ignore: (int)
-            Number of calendar periods to ignore. Set 0 as default.
+        cal_y_ignore: (int)  
+            Number of calendar periods to ignore. Set 0 as default.  
 
-        acc_y_ignore: (int)
-            Number of accident periods to ignore. Set 0 as default.
+        acc_y_ignore: (int)  
+            Number of accident periods to ignore. Set 0 as default.  
 
-        f_ignore: (array)
-            Array in order to include the Fij to ignore. ie: [('12/2014', 1), ('12/2016', 1), ('12/2013', 2)].
-            Set None as default.
+        f_ignore: (array)  
+            Array in order to include the Fij to ignore. ie: [('12/2014', 1), ('12/2016', 1), ('12/2013', 2)].  
+            Set None as default.  
 
 
-        Atributes
-        ----------
-            graph_df: Graph the Development Factors.
-            cdf: Returns the cummulative development factors.
-            inv_df: Returns the inverse values of cummulative development factors.
-            tail_f: Returns tail factors according to defferent attributes.
-            graph_tail_f: Graph tail factors according to defferent attributes.
+        Atributes  
+        ----------  
+            graph_df: Graph the Development Factors.  
+            cdf: Returns the cummulative development factors.  
+            inv_df: Returns the inverse values of cummulative development factors.  
+            tail_f: Returns tail factors according to defferent attributes.  
+            graph_tail_f: Graph tail factors according to defferent attributes.  
         """
         factor = devf.df_generator(self.input_triangle, method, cal_y_ignore, acc_y_ignore, f_ignore)
         return dev_f(factor)
@@ -197,51 +334,51 @@ class CumPayments_triangle(triangle):
     # Graph development Factors
     def graph_devf(self, method, cal_y_ignore, acc_y_ignore, f_ignore):
         """
-        Graph the Development Factors in order to project losses.
-
-        Parameters
-        ----------
-        method: (str)
-            Method to estimate development factors. Possible values:
-                - 'all': Returns a summary of all metrics.
-                - 'avg': Arithmetic mean of the Link Factors. 
-                - 'vol_weight': Weighted average of the factors by the amount of claims (giving greater weight to factors with a higher claim frequency). (Most used)
-                - 'time_weight': Weighted average of the factors, giving more weight to the most recent factors compared to older periods.
-                - 'median': Median of the step factors.
-                - 'geom_avg': Geometric average.
-                - 'medial_avg': Arithmetic mean, ignoring the maximum and minimum Link Factors.
-                - 'min': Value of the minimum Link Factor.
-                - 'max': Value of the maximum Link Factor.
-        
-        cal_y_ignore: (int)
-            Number of calendar periods to ignore. Set 0 as default.
-
-        acc_y_ignore: (int)
-            Number of accident periods to ignore. Set 0 as default.
-
-        f_ignore: (array)
-            Array in order to include the Fij to ignore. ie: [('12/2014', 1), ('12/2016', 1), ('12/2013', 2)].
-            Set None as default.
+        Graph the Development Factors in order to project losses.  
+  
+        Parameters  
+        ----------  
+        method: (str)  
+            Method to estimate development factors. Possible values:  
+                - 'all': Returns a summary of all metrics.  
+                - 'avg': Arithmetic mean of the Link Factors.   
+                - 'vol_weight': Weighted average of the factors by the amount of claims (giving greater weight to factors with a higher claim frequency). (Most used)  
+                - 'time_weight': Weighted average of the factors, giving more weight to the most recent factors compared to older periods.  
+                - 'median': Median of the step factors.  
+                - 'geom_avg': Geometric average.  
+                - 'medial_avg': Arithmetic mean, ignoring the maximum and minimum Link Factors.  
+                - 'min': Value of the minimum Link Factor.  
+                - 'max': Value of the maximum Link Factor.  
+          
+        cal_y_ignore: (int)  
+            Number of calendar periods to ignore. Set 0 as default.  
+  
+        acc_y_ignore: (int)  
+            Number of accident periods to ignore. Set 0 as default.  
+  
+        f_ignore: (array)  
+            Array in order to include the Fij to ignore. ie: [('12/2014', 1), ('12/2016', 1), ('12/2013', 2)].  
+            Set None as default.  
         """
         return devf.graph_methods_df(self.input_triangle, method, cal_y_ignore=0, acc_y_ignore=0, f_ignore=None)
 
 
     def tests_cl(self, dev_f, test):
         """
-        Returns different tests in order to analyse if data are enough propper to use Loss Developments methods.
-
-        Parameters
-        ----------
-        dev_f: (array)
-            Development factors to develop the triangle. It may be the DF calculated with the method 'graph_df' or a customized array.
-            Dimension must match with 'len(triangle)-1'.
-
-        test: (str)
-            Test to show:
-                - 'linear': Show graphs by Development Periods in order to analyse the linearity of LinkFactors Fij.
-                - 'residual': Show the graphs of residual in order to understand if they are randomly distributed or not.
-                - 'calendar':
-                - 'correlation': Show the 
+        Returns different tests in order to analyse if data are enough propper to use Loss Developments methods.  
+  
+        Parameters  
+        ----------  
+        dev_f: (array)  
+            Development factors to develop the triangle. It may be the DF calculated with the method 'graph_df' or a customized array.  
+            Dimension must match with 'len(triangle)-1'.  
+  
+        test: (str)  
+            Test to show:  
+                - 'linear': Show graphs by Development Periods in order to analyse the linearity of LinkFactors Fij.  
+                - 'residual': Show the graphs of residual in order to understand if they are randomly distributed or not.  
+                - 'calendar':  
+                - 'correlation': Show the   
         """
 
         if test == 'linear':
@@ -260,24 +397,24 @@ class CumPayments_triangle(triangle):
     # Project triangle Chain-Ladder Method
     def chainladder(self, dev_f, tail_f = None):
         """
-        Project Loss development Method. Returns the projected triangle.
+        Project Loss development Method. Returns the projected triangle.  
 
-        Parameters
-        ----------
-        dev_f: (array)
-            Development factors to develop the triangle. It may be the DF calculated with the method 'graph_df' or a customized array.
-            Dimension must match with 'len(triangle)-1'.
-
-        tail_f: (array)
-            Tail_factors to add after Development Factors. Set None as default
-
-        Atributes
-        ----------
-            diag: Returns the last diagonal of the triangle (actual).
-            ultimate: Returns the ultimate projected.
-            show: Returns the developed triangle in a data frame format.
-            ibnr: Returns the IBNR by accident period.
-            reserve: Returns the Reserves by accident period.
+        Parameters  
+        ----------  
+        dev_f: (array)  
+            Development factors to develop the triangle. It may be the DF calculated with the method 'graph_df' or a customized array.  
+            Dimension must match with 'len(triangle)-1'.  
+  
+        tail_f: (array)  
+            Tail_factors to add after Development Factors. Set None as default  
+  
+        Atributes  
+        ----------  
+            diag: Returns the last diagonal of the triangle (actual).  
+            ultimate: Returns the ultimate projected.  
+            show: Returns the developed triangle in a data frame format.  
+            ibnr: Returns the IBNR by accident period.  
+            reserve: Returns the Reserves by accident period.  
         """
         projection = dt.chainladder(self.input_triangle, dev_f, tail_f)
         return Payments_developed_tr(projection)
@@ -285,27 +422,27 @@ class CumPayments_triangle(triangle):
     # Project triangle Bornhuetter-Ferguson Method
     def bf(self, dev_f, a_priori_ult, tail_f = None):
         """
-        Project Bornhuetter-Ferguson Method. Returns the projected triangle.
-
-        Parameters
-        ----------
-        dev_f: (array)
-            Development factors to develop the triangle. It may be the DF calculated with the method 'graph_df' or a customized array.
-            Dimension must match with 'len(triangle)-1'.
-        
-        a_priori_ult: (array)
-            a priori Ultimate in order to project by BF. 
-
-        tail_f: (array)
-            Tail_factors to add after Development Factors. Set None as default
-
-        Atributes
-        ----------
-            diag: Returns the last diagonal of the triangle (actual).
-            ultimate: Returns the ultimate projected.
-            show: Returns the developed triangle in a data frame format.
-            ibnr: Returns the IBNR by accident period.
-            reserve: Returns the Reserves by accident period.
+        Project Bornhuetter-Ferguson Method. Returns the projected triangle.  
+  
+        Parameters  
+        ----------  
+        dev_f: (array)  
+            Development factors to develop the triangle. It may be the DF calculated with the method 'graph_df' or a customized array.  
+            Dimension must match with 'len(triangle)-1'.  
+          
+        a_priori_ult: (array)  
+            a priori Ultimate in order to project by BF.   
+  
+        tail_f: (array)  
+            Tail_factors to add after Development Factors. Set None as default  
+  
+        Atributes  
+        ----------  
+            diag: Returns the last diagonal of the triangle (actual).  
+            ultimate: Returns the ultimate projected.  
+            show: Returns the developed triangle in a data frame format.  
+            ibnr: Returns the IBNR by accident period.  
+            reserve: Returns the Reserves by accident period.  
         """
         projection = dt.bf(self.input_triangle, dev_f, a_priori_ult)
         return Payments_developed_tr(projection)
@@ -316,15 +453,15 @@ class CumPayments_triangle(triangle):
 class IncPayments_triangle(triangle):
 
     """
-    Class to include Incremental Payment Triangles.
-
-    Atributes
-    ----------
-        - diag
-        - graph_tr
-        - heatmap
-        - show
-        - to_cum
+    Class to include Incremental Payment Triangles.  
+  
+    Atributes  
+    ----------  
+        - diag  
+        - graph_tr  
+        - heatmap  
+        - show  
+        - to_cum  
     """
 
     def __init__(self, input_triangle):
@@ -345,14 +482,14 @@ class IncPayments_triangle(triangle):
 class CaseReserves_triangle(triangle):
 
     """
-    Class to include Case Reserve Triangles.
-
-    Atributes
-    ----------
-        - diag
-        - graph_tr
-        - heatmap
-        - show
+    Class to include Case Reserve Triangles.  
+  
+    Atributes  
+    ----------  
+        - diag  
+        - graph_tr  
+        - heatmap  
+        - show  
     """
 
     def __init__(self, input_triangle):
@@ -364,21 +501,21 @@ class CaseReserves_triangle(triangle):
 class Incurred_triangle(triangle):
 
     """
-    Class to include Incurred Costs Triangles.
-
-    Atributes
-    ----------
-        - diag
-        - graph_tr
-        - heatmap
-        - show
-        - link_factors
-        - heatmap_linkf
-        - graph_linkf
-        - get_dev_f
-        - graph_dev_f
-        - chainladder
-        - bf
+    Class to include Incurred Costs Triangles.  
+  
+    Atributes  
+    ----------  
+        - diag  
+        - graph_tr  
+        - heatmap  
+        - show  
+        - link_factors  
+        - heatmap_linkf  
+        - graph_linkf  
+        - get_dev_f  
+        - graph_dev_f  
+        - chainladder  
+        - bf  
     """
 
     def __init__(self, input_triangle):
@@ -411,41 +548,41 @@ class Incurred_triangle(triangle):
     #def get_dev_f(self, method, cal_y_ignore, acc_y_ignore, f_ignore):
     #    return devf.df_generator(self.input_triangle, method, cal_y_ignore, acc_y_ignore, f_ignore)
     def get_dev_f(self, method, cal_y_ignore=0, acc_y_ignore=0, f_ignore=None):
-        """
-        Returns the Development Factors in order to project losses.
-
-        Parameters
-        ----------
-        method: (str)
-            Method to estimate development factors. Possible values:
-                - 'all': Returns a summary of all metrics.
-                - 'avg': Arithmetic mean of the Link Factors. 
-                - 'vol_weight': Weighted average of the factors by the amount of claims (giving greater weight to factors with a higher claim frequency). (Most used)
-                - 'time_weight': Weighted average of the factors, giving more weight to the most recent factors compared to older periods.
-                - 'median': Median of the step factors.
-                - 'geom_avg': Geometric average.
-                - 'medial_avg': Arithmetic mean, ignoring the maximum and minimum Link Factors.
-                - 'min': Value of the minimum Link Factor.
-                - 'max': Value of the maximum Link Factor.
-        
-        cal_y_ignore: (int)
-            Number of calendar periods to ignore. Set 0 as default.
-
-        acc_y_ignore: (int)
-            Number of accident periods to ignore. Set 0 as default.
-
-        f_ignore: (array)
-            Array in order to include the Fij to ignore. ie: [('12/2014', 1), ('12/2016', 1), ('12/2013', 2)].
-            Set None as default.
-
-
-        Atributes
-        ----------
-            graph_df: Graph the Development Factors.
-            cdf: Returns the cummulative development factors.
-            inv_df: Returns the inverse values of cummulative development factors.
-            tail_f: Returns tail factors according to defferent attributes.
-            graph_tail_f: Graph tail factors according to defferent attributes.
+        """  
+        Returns the Development Factors in order to project losses.  
+  
+        Parameters  
+        ----------  
+        method: (str)  
+            Method to estimate development factors. Possible values:  
+                - 'all': Returns a summary of all metrics.  
+                - 'avg': Arithmetic mean of the Link Factors.   
+                - 'vol_weight': Weighted average of the factors by the amount of claims (giving greater weight to factors with a higher claim frequency). (Most used)  
+                - 'time_weight': Weighted average of the factors, giving more weight to the most recent factors compared to older periods.  
+                - 'median': Median of the step factors.  
+                - 'geom_avg': Geometric average.  
+                - 'medial_avg': Arithmetic mean, ignoring the maximum and minimum Link Factors.  
+                - 'min': Value of the minimum Link Factor.  
+                - 'max': Value of the maximum Link Factor.  
+          
+        cal_y_ignore: (int)  
+            Number of calendar periods to ignore. Set 0 as default.  
+  
+        acc_y_ignore: (int)  
+            Number of accident periods to ignore. Set 0 as default.  
+  
+        f_ignore: (array)  
+            Array in order to include the Fij to ignore. ie: [('12/2014', 1), ('12/2016', 1), ('12/2013', 2)].  
+            Set None as default.  
+  
+  
+        Atributes  
+        ----------  
+            graph_df: Graph the Development Factors.  
+            cdf: Returns the cummulative development factors.  
+            inv_df: Returns the inverse values of cummulative development factors.  
+            tail_f: Returns tail factors according to defferent attributes.  
+            graph_tail_f: Graph tail factors according to defferent attributes.  
         """
         factor = devf.df_generator(self.input_triangle, method, cal_y_ignore, acc_y_ignore, f_ignore)
         return dev_f(factor)
@@ -453,31 +590,31 @@ class Incurred_triangle(triangle):
     # Graph development Factors
     def graph_devf(self, method, cal_y_ignore=0, acc_y_ignore=0, f_ignore=None):
         """
-        Graph the Development Factors in order to project losses.
-
-        Parameters
-        ----------
-        method: (str)
-            Method to estimate development factors. Possible values:
-                - 'all': Returns a summary of all metrics.
-                - 'avg': Arithmetic mean of the Link Factors. 
-                - 'vol_weight': Weighted average of the factors by the amount of claims (giving greater weight to factors with a higher claim frequency). (Most used)
-                - 'time_weight': Weighted average of the factors, giving more weight to the most recent factors compared to older periods.
-                - 'median': Median of the step factors.
-                - 'geom_avg': Geometric average.
-                - 'medial_avg': Arithmetic mean, ignoring the maximum and minimum Link Factors.
-                - 'min': Value of the minimum Link Factor.
-                - 'max': Value of the maximum Link Factor.
-        
-        cal_y_ignore: (int)
-            Number of calendar periods to ignore. Set 0 as default.
-
-        acc_y_ignore: (int)
-            Number of accident periods to ignore. Set 0 as default.
-
-        f_ignore: (array)
-            Array in order to include the Fij to ignore. ie: [('12/2014', 1), ('12/2016', 1), ('12/2013', 2)].
-            Set None as default.
+        Graph the Development Factors in order to project losses.  
+  
+        Parameters  
+        ----------  
+        method: (str)  
+            Method to estimate development factors. Possible values:  
+                - 'all': Returns a summary of all metrics.  
+                - 'avg': Arithmetic mean of the Link Factors.   
+                - 'vol_weight': Weighted average of the factors by the amount of claims (giving greater weight to factors with a higher claim frequency). (Most used)  
+                - 'time_weight': Weighted average of the factors, giving more weight to the most recent factors compared to older periods.  
+                - 'median': Median of the step factors.  
+                - 'geom_avg': Geometric average.  
+                - 'medial_avg': Arithmetic mean, ignoring the maximum and minimum Link Factors.  
+                - 'min': Value of the minimum Link Factor.  
+                - 'max': Value of the maximum Link Factor.  
+          
+        cal_y_ignore: (int)  
+            Number of calendar periods to ignore. Set 0 as default.  
+  
+        acc_y_ignore: (int)  
+            Number of accident periods to ignore. Set 0 as default.  
+  
+        f_ignore: (array)  
+            Array in order to include the Fij to ignore. ie: [('12/2014', 1), ('12/2016', 1), ('12/2013', 2)].  
+            Set None as default.  
         """
         return devf.graph_methods_df(self.input_triangle, method, cal_y_ignore, acc_y_ignore, f_ignore)
 
@@ -485,20 +622,20 @@ class Incurred_triangle(triangle):
 
     def tests_cl(self, dev_f, test):
         """
-        Returns different tests in order to analyse if data are enough propper to use Loss Developments methods.
-
-        Parameters
-        ----------
-        dev_f: (array)
-            Development factors to develop the triangle. It may be the DF calculated with the method 'graph_df' or a customized array.
-            Dimension must match with 'len(triangle)-1'.
-
-        test: (str)
-            Test to show:
-                - 'linear': Show graphs by Development Periods in order to analyse the linearity of LinkFactors Fij.  
-                - 'residual': Show the graphs of residual in order to understand if they are randomly distributed or not.  
-                - 'calendar':  
-                - 'correlation': Show the   
+        Returns different tests in order to analyse if data are enough propper to use Loss Developments methods.  
+  
+        Parameters  
+        ----------  
+        dev_f: (array)  
+            Development factors to develop the triangle. It may be the DF calculated with the method 'graph_df' or a customized array.  
+            Dimension must match with 'len(triangle)-1'.  
+  
+        test: (str)  
+            Test to show:  
+                - 'linear': Show graphs by Development Periods in order to analyse the linearity of LinkFactors Fij.    
+                - 'residual': Show the graphs of residual in order to understand if they are randomly distributed or not.    
+                - 'calendar':    
+                - 'correlation': Show the     
         """
 
         if test == 'linear':
@@ -517,24 +654,24 @@ class Incurred_triangle(triangle):
     # Project triangle Chain-Ladder Method
     def chainladder(self, dev_f, tail_f = None):
         """
-        Project Loss development Method. Returns the projected triangle.
+        Project Loss development Method. Returns the projected triangle.  
 
-        Parameters
-        ----------
-        dev_f: (array)
-            Development factors to develop the triangle. It may be the DF calculated with the method 'graph_df' or a customized array.
-            Dimension must match with 'len(triangle)-1'.
-
-        tail_f: (array)
-            Tail_factors to add after Development Factors. Set None as default
-
-        Atributes
-        ----------
-            diag: Returns the last diagonal of the triangle (actual).
-            ultimate: Returns the ultimate projected.
-            show: Returns the developed triangle in a data frame format.
-            ibnr: Returns the IBNR by accident period.
-            reserve: Returns the Reserves by accident period.
+        Parameters  
+        ----------    
+        dev_f: (array)  
+            Development factors to develop the triangle. It may be the DF calculated with the method 'graph_df' or a customized array.  
+            Dimension must match with 'len(triangle)-1'.  
+  
+        tail_f: (array)  
+            Tail_factors to add after Development Factors. Set None as default  
+  
+        Atributes  
+        ----------  
+            diag: Returns the last diagonal of the triangle (actual).  
+            ultimate: Returns the ultimate projected.  
+            show: Returns the developed triangle in a data frame format.  
+            ibnr: Returns the IBNR by accident period.  
+            reserve: Returns the Reserves by accident period.  
         """
         projection = dt.chainladder(self.input_triangle, dev_f, tail_f)
         return Incurred_developed_tr(projection)
@@ -542,27 +679,27 @@ class Incurred_triangle(triangle):
     # Project triangle Bornhuetter-Ferguson Method
     def bf(self, dev_f, a_priori_ult, tail_f = None):
         """
-        Project Bornhuetter-Ferguson Method. Returns the projected triangle.
-
-        Parameters
-        ----------
-        dev_f: (array)
-            Development factors to develop the triangle. It may be the DF calculated with the method 'graph_df' or a customized array.
-            Dimension must match with 'len(triangle)-1'.
-        
-        a_priori_ult: (array)
-            a priori Ultimate in order to project by BF. 
-
-        tail_f: (array)
-            Tail_factors to add after Development Factors. Set None as default
-
-        Atributes
-        ----------
-            diag: Returns the last diagonal of the triangle (actual).
-            ultimate: Returns the ultimate projected.
-            show: Returns the developed triangle in a data frame format.
-            ibnr: Returns the IBNR by accident period.
-            reserve: Returns the Reserves by accident period.
+        Project Bornhuetter-Ferguson Method. Returns the projected triangle.  
+  
+        Parameters  
+        ----------  
+        dev_f: (array)  
+            Development factors to develop the triangle. It may be the DF calculated with the method 'graph_df' or a customized array.  
+            Dimension must match with 'len(triangle)-1'.  
+          
+        a_priori_ult: (array)  
+            a priori Ultimate in order to project by BF.   
+  
+        tail_f: (array)  
+            Tail_factors to add after Development Factors. Set None as default  
+  
+        Atributes  
+        ----------  
+            diag: Returns the last diagonal of the triangle (actual).  
+            ultimate: Returns the ultimate projected.  
+            show: Returns the developed triangle in a data frame format.  
+            ibnr: Returns the IBNR by accident period.  
+            reserve: Returns the Reserves by accident period.  
         """
         projection = dt.bf(self.input_triangle, dev_f, a_priori_ult, tail_f)
         return Incurred_developed_tr(projection)
@@ -576,16 +713,16 @@ class Incurred_triangle(triangle):
 class dev_f(np.ndarray):
 
     """
-    Class to include Development Factor array. Input must be a numpy array.
-
-    Atributes
-    ----------
-        - graph_df
-        - cdf
-        - show
-        - inv_df
-        - tail_f
-        - graph_tail_f
+    Class to include Development Factor array. Input must be a numpy array.  
+  
+    Atributes  
+    ----------  
+        - graph_df  
+        - cdf  
+        - show  
+        - inv_df  
+        - tail_f  
+        - graph_tail_f  
     """
 
     def __init__(self, df):
@@ -619,46 +756,46 @@ class dev_f(np.ndarray):
     # Get Tail Factors:
     def tail_f(self, distribution, only_tail = 1, num_factors = 5):
         """
-        Estimates the tail factors according to a distribution given.
-
-        Parameters
-        ----------
-        distribution: (str)
-            Distribution to use in tail factor calculation:  
-                - 'all': Shows a summary of the all possible estimations.  
-                - 'exp': Uses exponential distribution.  
-                - 'inv_power': Uses inverse power distribution.  
-                - 'power': Uses power distribution.  
-                - 'weibull': Uses Weibull distribution.  
-
-        
-        only_tail: (int)
-            Only can take 1 or 0 values:
-                - 1: The function will return only the tail factor estimated.  
-                - 0: The function will return the tail factor as well as the rest of factors adjusted to the selected distribution.
-
-        num_factors: (int)
-            Number of tail_factors to add after Development Factors. Set None as default.
+        Estimates the tail factors according to a distribution given.  
+  
+        Parameters  
+        ----------  
+        distribution: (str)  
+            Distribution to use in tail factor calculation:    
+                - 'all': Shows a summary of the all possible estimations.    
+                - 'exp': Uses exponential distribution.    
+                - 'inv_power': Uses inverse power distribution.    
+                - 'power': Uses power distribution.    
+                - 'weibull': Uses Weibull distribution.    
+  
+          
+        only_tail: (int)  
+            Only can take 1 or 0 values:  
+                - 1: The function will return only the tail factor estimated.    
+                - 0: The function will return the tail factor as well as the rest of factors adjusted to the selected distribution.  
+  
+        num_factors: (int)  
+            Number of tail_factors to add after Development Factors. Set None as default.  
         """
         return tailf.summary_tail_f(self.df, distribution, only_tail, num_factors)
     
     # Get Tail Factors:
     def graph_tail_f(self, distribution, num_factors=5):
         """
-        Estimates the tail factors according to a distribution given.
-
-        Parameters
-        ----------
-        distribution: (str)
-            Distribution to use in tail factor calculation:  
-                - 'all': Shows a summary of the all possible estimations.  
-                - 'exp': Uses exponential distribution.  
-                - 'inv_power': Uses inverse power distribution.  
-                - 'power': Uses power distribution.  
-                - 'weibull': Uses Weibull distribution.  
-
-        num_factors: (int)
-            Number of tail_factors to add after Development Factors. Set None as default.
+        Estimates the tail factors according to a distribution given.  
+  
+        Parameters  
+        ----------  
+        distribution: (str)  
+            Distribution to use in tail factor calculation:    
+                - 'all': Shows a summary of the all possible estimations.    
+                - 'exp': Uses exponential distribution.    
+                - 'inv_power': Uses inverse power distribution.    
+                - 'power': Uses power distribution.    
+                - 'weibull': Uses Weibull distribution.    
+  
+        num_factors: (int)  
+            Number of tail_factors to add after Development Factors. Set None as default.  
         """
 
         return tailf.graph_tail_f(self.df, distribution, num_factors)
@@ -683,13 +820,13 @@ class dev_f(np.ndarray):
 class developed_tr():
 
     """
-    Class to include a developed Triangle.
-
-    Atributes
-    ----------
-        - diag
-        - ultimate
-        - show
+    Class to include a developed Triangle.  
+  
+    Atributes  
+    ----------  
+        - diag  
+        - ultimate  
+        - show  
     """
 
     def __init__(self, developed_tr):
@@ -739,15 +876,15 @@ class developed_tr():
 class Payments_developed_tr(developed_tr):
 
     """
-    Class to include a developed Payment Triangle.
-
-    Atributes
-    ----------
-        - diag
-        - ultimate
-        - show
-        - ibnr
-        - reserve
+    Class to include a developed Payment Triangle.  
+  
+    Atributes  
+    ----------  
+        - diag  
+        - ultimate  
+        - show  
+        - ibnr  
+        - reserve  
     """
 
     def __init__(self, developed_tr):
@@ -760,13 +897,13 @@ class Payments_developed_tr(developed_tr):
     # Get the IBNR:
     def ibnr(self, case_reserves = None):
         """
-        Returns the IBNR of the projected triangle:
-        IBNR = Ultimate - Diag. (Payments) - Case Reserves (Diag of Case Reserves Triangle)
-
-        Parameters
-        ----------
-        case_reserves: (array)
-            Case reserves in array format by Acciden Period (Diag of Case Reserves Triangle).
+        Returns the IBNR of the projected triangle:  
+        IBNR = Ultimate - Diag. (Payments) - Case Reserves (Diag of Case Reserves Triangle)  
+  
+        Parameters  
+        ----------  
+        case_reserves: (array)  
+            Case reserves in array format by Acciden Period (Diag of Case Reserves Triangle).  
         """
         if case_reserves == None:
             return print('Case Reserves needed')
@@ -781,8 +918,8 @@ class Payments_developed_tr(developed_tr):
     #Get the reserves:
     def reserve(self):
         """
-        Returns the Reserve of the projected triangle:
-        IBNR = Ultimate - Diag. (Payments)
+        Returns the Reserve of the projected triangle:  
+        Reserve = Ultimate - Diag. (Payments)  
         """
         ult = np.array(dt.get_ultimate(self.developed_tr))
         diag = np.array(tr.last_diag(self.developed_tr))
@@ -795,15 +932,15 @@ class Payments_developed_tr(developed_tr):
 class Incurred_developed_tr(developed_tr):
 
     """
-    Class to include an Incurred Cost Triangle.
-
-    Atributes
-    ----------
-        - diag
-        - ultimate
-        - show
-        - ibnr
-        - reserve
+    Class to include an Incurred Cost Triangle.  
+  
+    Atributes  
+    ----------  
+        - diag  
+        - ultimate  
+        - show  
+        - ibnr  
+        - reserve  
     """
 
     def __init__(self, developed_tr):
@@ -816,8 +953,8 @@ class Incurred_developed_tr(developed_tr):
     # Get the IBNR:
     def ibnr(self):
         """
-        Returns the IBNR of the projected triangle:
-        IBNR = Ultimate - Diag. (Incurred Cost)
+        Returns the IBNR of the projected triangle:  
+        IBNR = Ultimate - Diag. (Incurred Cost)  
         """
         ult = np.array(dt.get_ultimate(self.developed_tr))
         diag = np.array(tr.last_diag(self.developed_tr))
@@ -827,17 +964,17 @@ class Incurred_developed_tr(developed_tr):
     #Get the reserves:
     def reserve(self, case_reserves = None, payments = None):
         """
-        Returns the Reserves of the projected triangle:
-        IBNR = Ultimate - Diag. (Incurred Cost) - Case Reserves
-        or
-        IBNR = Ultimate - Payments
-
-        Parameters: At least one of the two parameters needed.
-        ----------
-        case_reserves: (array)
-            Case reserves in array format by Acciden Period (Diag of Case Reserves Triangle).
-        payments: (array)
-            Payments in array format by Acciden Period (Diag of CumPayments Triangle).
+        Returns the Reserves of the projected triangle:  
+        Reserve = Ultimate - Diag. (Incurred Cost) - Case Reserves  
+        or  
+        Reserve = Ultimate - Payments  
+  
+        Parameters: At least one of the two parameters needed.  
+        ----------  
+        case_reserves: (array)  
+            Case reserves in array format by Acciden Period (Diag of Case Reserves Triangle).  
+        payments: (array)  
+            Payments in array format by Acciden Period (Diag of CumPayments Triangle).  
         """
         if case_reserves == None and payments == None:
             return print('Case Reserves or payments needed')

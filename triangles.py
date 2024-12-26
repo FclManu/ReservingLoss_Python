@@ -10,8 +10,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
-from datetime import datetime, timedelta
-from dateutil.relativedelta import relativedelta
+
 
 
 
@@ -29,6 +28,21 @@ def triangle_from_csv(file: str, base_period: str, dev_period: str, aggr_values:
     ----------
     file: (str)
         Name of file to read
+
+    base_period: (str)
+        Name of the column that refers to the origin period.  
+
+    dev_period: (str)
+        Name of the column that refers to the development period.  
+
+    aggr_values: (str)  
+        Name of the column that refers to the values to aggregate (payments, incurred costs, reserves...).  
+
+    lob_column: (str)
+        Name of the column that refers to LoB in case the data need to be filtered. None as default.
+
+     lob_name: (str)
+        Name of the LoB we want to filter. None as default.         
     """
 
     data = pd.read_csv(file)
