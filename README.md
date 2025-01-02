@@ -10,11 +10,14 @@ Welcome to reservingloss package! This package can be an easy solution in order 
   - Deterministic Projections: Chain-Ladder, Bornhuetter-Ferguson.
   - Chain-Ladder Tests: Linearity Test.
 
+## Included in last version:
+  - Deterministic Projections: Caped-Cod.
+
 ## To be implemented in the future:
-  - New Deterministic Projections: Cape-Cod, Munich Chain-Ladder.
+  - New Deterministic Projections: Munich Chain-Ladder.
   - Extraction of Payment Pattern and Future CashFlows.
   - Discounting of Future CashFlows and Web Scrapping to download EIOPA RFR Curves.
   - New Chain-Ladder Tests: Residual Test, Calendar Test, Correlation Test.
-  - Stochastic Methods: Mack CL, Merz-Wüthrich, Bootstrap.
+  - Stochastic Methods: Mack CL, Merz-Wüthrich, ODP Bootstrap.
 
 [Visit my Linkedin profile](https://es.linkedin.com/in/manuel-fern%C3%A1ndez-clemente-lozano-6a1616b3)

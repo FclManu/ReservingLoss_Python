@@ -444,7 +444,36 @@ class CumPayments_triangle(triangle):
             ibnr: Returns the IBNR by accident period.  
             reserve: Returns the Reserves by accident period.  
         """
-        projection = dt.bf(self.input_triangle, dev_f, a_priori_ult)
+        projection = dt.bf(self.input_triangle, dev_f, a_priori_ult, tail_f)
+        return Payments_developed_tr(projection)
+    
+
+    # Project triangle Cape-Cod Method
+    def cape_cod(self, dev_f, premiums, tail_f = None):
+        """
+        Project Bornhuetter-Ferguson Method. Returns the projected triangle.  
+  
+        Parameters  
+        ----------  
+        dev_f: (array)  
+            Development factors to develop the triangle. It may be the DF calculated with the method 'graph_df' or a customized array.  
+            Dimension must match with 'len(triangle)-1'.  
+          
+        premiums: (array)  
+            Premiums by Origin Period
+  
+        tail_f: (array)  
+            Tail_factors to add after Development Factors. Set None as default  
+  
+        Atributes  
+        ----------  
+            diag: Returns the last diagonal of the triangle (actual).  
+            ultimate: Returns the ultimate projected.  
+            show: Returns the developed triangle in a data frame format.  
+            ibnr: Returns the IBNR by accident period.  
+            reserve: Returns the Reserves by accident period.  
+        """
+        projection = dt.capecod(self.input_triangle, dev_f, premiums, tail_f)
         return Payments_developed_tr(projection)
 
 
@@ -703,7 +732,38 @@ class Incurred_triangle(triangle):
         """
         projection = dt.bf(self.input_triangle, dev_f, a_priori_ult, tail_f)
         return Incurred_developed_tr(projection)
-     
+    
+
+
+    # Project triangle Cape-Cod Method
+    def cape_cod(self, dev_f, premiums, tail_f = None):
+        """
+        Project Bornhuetter-Ferguson Method. Returns the projected triangle.  
+  
+        Parameters  
+        ----------  
+        dev_f: (array)  
+            Development factors to develop the triangle. It may be the DF calculated with the method 'graph_df' or a customized array.  
+            Dimension must match with 'len(triangle)-1'.  
+          
+        premiums: (array)  
+            Premiums by Origin Period
+  
+        tail_f: (array)  
+            Tail_factors to add after Development Factors. Set None as default  
+  
+        Atributes  
+        ----------  
+            diag: Returns the last diagonal of the triangle (actual).  
+            ultimate: Returns the ultimate projected.  
+            show: Returns the developed triangle in a data frame format.  
+            ibnr: Returns the IBNR by accident period.  
+            reserve: Returns the Reserves by accident period.  
+        """
+        projection = dt.capecod(self.input_triangle, dev_f, premiums, tail_f)
+        return Incurred_developed_tr(projection)
+
+
 
 
 ###################################################################

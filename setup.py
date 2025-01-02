@@ -3,37 +3,32 @@ from setuptools import find_packages, setup
 
 HERE = pathlib.Path(__file__).parent
 
-VERSION = '0.1.1' 
-PACKAGE_NAME = 'ReservingLoss' 
-AUTHOR = 'Manuel Fernández-Clemente Lozano' 
-AUTHOR_EMAIL = 'manuel.fdezclemente@gmail.com' 
+VERSION = '0.2.0'
+PACKAGE_NAME = 'ReservingLoss'
+AUTHOR = 'Manuel Fernández-Clemente Lozano'
+AUTHOR_EMAIL = 'manuel.fdezclemente@gmail.com'
 URL = 'https://github.com/FclManu'
 
-LICENSE = 'MIT' 
+LICENSE = 'MIT'
 DESCRIPTION = 'Python Library as a Non Life Reserving tool.'
-LONG_DESCRIPTION = (HERE / "README.md").read_text(encoding='utf-8') 
+try:
+    LONG_DESCRIPTION = (HERE / "README.md").read_text(encoding='utf-8')
+except FileNotFoundError:
+    LONG_DESCRIPTION = DESCRIPTION
 LONG_DESC_TYPE = "text/markdown"
 
-
-#Paquetes necesarios para que funcione la libreía. Se instalarán a la vez si no lo tuvieras ya instalado
 INSTALL_REQUIRES = [
-      'pandas',
-      'numpy',
-      'plotly.express',
-      'plotly.graph_objects',
-      'plotly.subplots',
-      'matplotlib.pyplot',
-      'seaborn',
-      'IPython.display',
-      'openpyxl',
-      'datetime',
-      'dateutil.relativedelta',
-      'sklearn.linear_model',
-      'sklearn.metrics',
-      'scipy.setup'
-      ]
-
-
+    'pandas>=1.0',
+    'numpy>=1.18',
+    'plotly>=5.0',
+    'matplotlib>=3.0',
+    'seaborn>=0.11',
+    'IPython>=7.0',
+    'openpyxl>=3.0',
+    'scikit-learn>=0.24',
+    'scipy>=1.5',
+    'python-dateutil>=2.8'
+]
 
 setup(
     name=PACKAGE_NAME,
@@ -47,5 +42,15 @@ setup(
     install_requires=INSTALL_REQUIRES,
     license=LICENSE,
     packages=find_packages(),
-    include_package_data=True
+    include_package_data=True,
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+    ],
+    python_requires='>=3.7',
 )
