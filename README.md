@@ -7,7 +7,7 @@ Welcome to reservingloss package! This package can be an easy solution in order 
   - Development factors according to different calculation methods (Volume Weight, Time Weight, Arithmetic Average, Median, Geometric Average, Minimum Factor, Maximum Fator, Median Average).
   - Graphics to represent Triangles, Link-Factors, Development Factors, Tail Factors.
   - Tail Factors (Weibull, Exponential, Power, Inverse Power).
-  - Deterministic Projections: Chain-Ladder, Bornhuetter-Ferguson.
+  - Deterministic Projections: Chain-Ladder, Bornhuetter-Ferguson, Cape-Cod.
   - Chain-Ladder Tests: Linearity Test.
 
 ## Included in last version:
