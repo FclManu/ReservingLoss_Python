@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 
 HERE = pathlib.Path(__file__).parent
 
-VERSION = '0.2.0'
+VERSION = '0.2.1'
 PACKAGE_NAME = 'ReservingLoss'
 AUTHOR = 'Manuel Fernández-Clemente Lozano'
 AUTHOR_EMAIL = 'manuel.fdezclemente@gmail.com'
