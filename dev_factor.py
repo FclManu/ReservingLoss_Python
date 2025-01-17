@@ -459,3 +459,28 @@ def inv_df(dev_f):
 
 ###################################################################
 
+
+###################################################################
+# Calculate Inverse Development Factors
+###################################################################
+
+
+def custom_df(*args):
+
+
+    result = []
+    for i, elem in enumerate(args):
+        if isinstance(elem, (list, np.ndarray)): 
+            result.append(elem[i])
+        else: 
+            result.append(elem)
+    return np.array(result)
+
+###################################################################
+
+
+
+
+
+
+

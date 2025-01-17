@@ -270,7 +270,7 @@ def heatmap_format(triangle, fmt=".4f"):
 
 
 ###################################################################
-# Function to obtain the las diag from a (projected) triangle:
+# Function to obtain the last diag from a (projected) triangle:
 
 def last_diag(tr):
     num_rows, num_cols = tr.shape

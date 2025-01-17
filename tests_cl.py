@@ -1,5 +1,5 @@
 ###################################################################
-##### FUNCTIONS TO PROJECT BY DETERMINISTIC MODELS:
+##### FUNCTIONS TO VISUALIZE TESTS FOR CHAIN-LADDER ASSUMPTIONS:
 ###################################################################
 
 import pandas as pd

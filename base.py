@@ -770,6 +770,25 @@ class Incurred_triangle(triangle):
 # Class to define Development Factors:
 ###################################################################
 
+
+
+
+def custom_devf(*args):
+    """
+    Allow customize the development factors .  
+  
+    Parameters  
+    ----------  
+    distribution: (float)  
+        It is possible to introduce a vector, or an individual factor.  
+        If a vector is included, it will include the factor in the same position.  
+        Example: custom_devf(vol_f, time_f, 1.2, avg_f, 1.2, 1.5, 1.1, 1, 1)  
+    """
+    factors = devf.custom_df(*args)
+    return dev_f(factors)
+
+
+
 class dev_f(np.ndarray):
 
     """
@@ -837,9 +856,93 @@ class dev_f(np.ndarray):
         num_factors: (int)  
             Number of tail_factors to add after Development Factors. Set None as default.  
         """
-        return tailf.summary_tail_f(self.df, distribution, only_tail, num_factors)
+        tail_f, cum_tail_f, rsq_tail_f, rsq_adj_tail_f = tailf.summary_tail_f(self.df, distribution, only_tail, num_factors)
+        return tail_f
     
+    # Get Cumulative Tail Factors:
+    def cum_tail_f(self, distribution, only_tail = 1, num_factors = 5):
+        """
+        Estimates the cumulative tail factor according to a distribution given (Product of all tail factors).  
+  
+        Parameters  
+        ----------  
+        distribution: (str)  
+            Distribution to use in tail factor calculation:    
+                - 'all': Shows a summary of the all possible estimations.    
+                - 'exp': Uses exponential distribution.    
+                - 'inv_power': Uses inverse power distribution.    
+                - 'power': Uses power distribution.    
+                - 'weibull': Uses Weibull distribution.    
+  
+          
+        only_tail: (int)  
+            Only can take 1 or 0 values:  
+                - 1: The function will return only the tail factor estimated.    
+                - 0: The function will return the tail factor as well as the rest of factors adjusted to the selected distribution.  
+  
+        num_factors: (int)  
+            Number of tail_factors to add after Development Factors. Set None as default.  
+        """
+        tail_f, cum_tail_f, rsq_tail_f, rsq_adj_tail_f = tailf.summary_tail_f(self.df, distribution, only_tail, num_factors)
+        return cum_tail_f
+
+
     # Get Tail Factors:
+    def rsq_tail_f(self, distribution, only_tail = 1, num_factors = 5):
+        """
+        Calculates the R Squared Adjusted of tail factors according data included.  
+  
+        Parameters  
+        ----------  
+        distribution: (str)  
+            Distribution to use in tail factor calculation:    
+                - 'all': Shows a summary of the all possible estimations.    
+                - 'exp': Uses exponential distribution.    
+                - 'inv_power': Uses inverse power distribution.    
+                - 'power': Uses power distribution.    
+                - 'weibull': Uses Weibull distribution.    
+  
+          
+        only_tail: (int)  
+            Only can take 1 or 0 values:  
+                - 1: The function will return only the tail factor estimated.    
+                - 0: The function will return the tail factor as well as the rest of factors adjusted to the selected distribution.  
+  
+        num_factors: (int)  
+            Number of tail_factors to add after Development Factors. Set None as default.  
+        """
+        tail_f, cum_tail_f, rsq_tail_f, rsq_adj_tail_f = tailf.summary_tail_f(self.df, distribution, only_tail, num_factors)
+        return rsq_tail_f
+    
+    # Get Cumulative Tail Factors:
+    def rsq_adj_tailf(self, distribution, only_tail = 1, num_factors = 5):
+        """
+        Calculates the R Squared Adjusted of tail factors according data included.    
+  
+        Parameters  
+        ----------  
+        distribution: (str)  
+            Distribution to use in tail factor calculation:    
+                - 'all': Shows a summary of the all possible estimations.    
+                - 'exp': Uses exponential distribution.    
+                - 'inv_power': Uses inverse power distribution.    
+                - 'power': Uses power distribution.    
+                - 'weibull': Uses Weibull distribution.    
+  
+          
+        only_tail: (int)  
+            Only can take 1 or 0 values:  
+                - 1: The function will return only the tail factor estimated.    
+                - 0: The function will return the tail factor as well as the rest of factors adjusted to the selected distribution.  
+  
+        num_factors: (int)  
+            Number of tail_factors to add after Development Factors. Set None as default.  
+        """
+        tail_f, cum_tail_f, rsq_tail_f, rsq_adj_tail_f = tailf.summary_tail_f(self.df, distribution, only_tail, num_factors)
+        return rsq_adj_tail_f
+
+    
+    # Graph Tail Factors:
     def graph_tail_f(self, distribution, num_factors=5):
         """
         Estimates the tail factors according to a distribution given.  
