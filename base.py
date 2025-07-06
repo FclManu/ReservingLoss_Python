@@ -291,7 +291,7 @@ class CumPayments_triangle(triangle):
     #Get development factors wo ignore any link ratio
     #def get_dev_f(self, method, cal_y_ignore, acc_y_ignore, f_ignore):
     #    return devf.df_generator(self.input_triangle, method, cal_y_ignore, acc_y_ignore, f_ignore)
-    def get_dev_f(self, method, cal_y_ignore = 0, acc_y_ignore = 0, f_ignore = None):
+    def get_dev_f(self, method='vol_weight', cal_y_ignore = 0, acc_y_ignore = 0, f_ignore = None):
         """
         Returns the Development Factors in order to project losses.  
 
@@ -576,7 +576,7 @@ class Incurred_triangle(triangle):
     #Get development factors wo ignore any link ratio
     #def get_dev_f(self, method, cal_y_ignore, acc_y_ignore, f_ignore):
     #    return devf.df_generator(self.input_triangle, method, cal_y_ignore, acc_y_ignore, f_ignore)
-    def get_dev_f(self, method, cal_y_ignore=0, acc_y_ignore=0, f_ignore=None):
+    def get_dev_f(self, method='vol_weight', cal_y_ignore=0, acc_y_ignore=0, f_ignore=None):
         """  
         Returns the Development Factors in order to project losses.  
   
